@@ -1,0 +1,32 @@
+.grid-container {
+    display: grid;
+    align-content: center;
+  }
+
+#input-div {
+    background-color: #eeeeee;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 60px;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    border-style: solid;
+    border-color: black;
+}
+
+textarea {
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;   
+    box-sizing: border-box;        
+    border-style: solid;
+    border-color: black;
+}
+
+button {
+    padding: 10px 24px;
+    margin: 10px;
+    border-radius: 3px;
+    background-color: white;
+}
