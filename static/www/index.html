@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Mađarska metoda</title>
 
-    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="./static/css/index.css">
     <link rel="stylesheet" href="../css/index.css">
 
 </head>
@@ -13,15 +13,17 @@
 <body>
 
     <div id="input-div">
-        <textarea id="input-area" cols="80" rows="20"></textarea>
-        <button id="submit">Riješi</button>
-        <div id="solution"></div>
-    
-        <br>
-        <table id="solution-table"></table>
+        <div class="wrapper">
+            <textarea id="input-area" cols="80" rows="20"></textarea>
+            <div>
+                <button id="submit">Riješi</button>
+            </div>
+            <div id="solution"></div>
+            <table id="solution-table"></table>
+        </div>
     </div>
 
-    <script src="/static/js/index.js"></script>
+    <script src="./static/js/index.js"></script>
     <script src="../js/index.js"></script>
 </body>
 </html>

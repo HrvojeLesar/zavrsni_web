@@ -1,21 +1,26 @@
-.grid-container {
-    display: grid;
-    align-content: center;
-  }
-
 #input-div {
-    background-color: #eeeeee;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 60px;
-    transform: translate(-50%, -50%);
+    background-color: #eeeeee;
+    height: auto;
     border-radius: 10px;
     border-style: solid;
     border-color: black;
+    top: 5%;
+    left: 30%;
+    padding: 3rem;
+}
+
+.wrapper {
+    float: left;
+}
+
+.wrapper > * {
+    margin-bottom: 10px;
 }
 
 textarea {
+    max-width: 100%;
+    max-height: 100%;
     width: 100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;   
@@ -26,7 +31,6 @@ textarea {
 
 button {
     padding: 10px 24px;
-    margin: 10px;
     border-radius: 3px;
     background-color: white;
 }

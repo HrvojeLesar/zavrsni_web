@@ -37,7 +37,7 @@ submitButton.addEventListener("click", function() {
         }
     });
     
-    xhr.open("POST", "/hung");
+    xhr.open("POST", "./hung");
     xhr.setRequestHeader("Content-Type", "application/json");
     
     lastSentMatrix = matrix;
