@@ -4,14 +4,21 @@ use dotenv::dotenv;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use actix_files::Files;
 
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 
 use madarska_metoda::{MadarskaMetoda, Matrix};
+#[derive(Debug, Deserialize)]
+struct HungInput {
+    max: Option<bool>,
+    problem: Vec<Vec<i32>>,
+}
 #[derive(Debug, Serialize)]
 struct HungResult {
-    min: i32,
+    result: i32,
+    original_problem: Vec<Vec<i32>>,
     assigned_positions: Vec<Vec<i32>>,
 }
+
 
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -20,11 +27,12 @@ async fn hello() -> impl Responder {
 }
 
 #[post("/hung")]
-async fn solve_hungarian(prob: web::Json<Vec<Vec<i32>>>) -> impl Responder {
+async fn solve_hungarian(input: web::Json<HungInput>) -> impl Responder {
     
-    let (res, assigned) = MadarskaMetoda::solve(&Matrix::new(prob.into_inner()));
+    let matrix_in = Matrix::new(input.problem.clone());
+    let (res, assigned) = MadarskaMetoda::solve(&matrix_in, input.max);
 
-    HttpResponse::Ok().json(HungResult { min: res, assigned_positions: assigned.matrix })
+    HttpResponse::Ok().json(HungResult { result: res, original_problem: matrix_in.matrix, assigned_positions: assigned.matrix })
 }
 
 #[actix_web::main]

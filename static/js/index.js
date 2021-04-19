@@ -2,8 +2,10 @@ const textArea = document.getElementById("input-area");
 const submitButton = document.getElementById("submit");
 const solutionDiv = document.getElementById("solution");
 const table = document.getElementById("solution-table");
+const minSelection = document.getElementById("min");
+const maxSelection = document.getElementById("max");
 
-let placeholder = "Napomena: Ulazna matrica mora biti kvadratna!\nPrimjer unosa:\n1 2 3\n2 4 6\n3 6 9";
+let placeholder = "Primjer unosa:\n1 2 3\n2 4 6\n3 6 9";
 textArea.setAttribute('placeholder', placeholder);
 
 const test = [
@@ -12,7 +14,7 @@ const test = [
     [3, 6, 9]
 ];
 
-let lastSentMatrix = [];
+let lastSentRequest = {};
 
 submitButton.addEventListener("click", function() {
     let matrix = parseInput();
@@ -30,19 +32,45 @@ submitButton.addEventListener("click", function() {
     
     xhr.addEventListener("readystatechange", function() {
         if(this.readyState === 4) {
-            console.log(this.responseText);
-            let responseJson = JSON.parse(this.responseText);
-            solutionDiv.textContent = "Minimalni trošak: " + responseJson.min;
-            displayTable(responseJson);
+            if (this.status === 200) {
+                submitButton.removeAttribute("disabled");
+                solutionDiv.style.color = "black";
+                let responseJson = JSON.parse(this.responseText);
+                if (lastSentRequest.max) {
+                    solutionDiv.textContent = "Maksimalni profit: " + responseJson.result;
+                } else {
+                    solutionDiv.textContent = "Minimalni trošak: " + responseJson.result;
+                }
+                displayTable(responseJson);
+            }
+            if (this.status === 413) {
+                solutionDiv.style.color = "red";
+                solutionDiv.textContent = "Dogodila se greška kod slanja matrice!\nPokušajte poslati manju matricu!";
+                submitButton.removeAttribute("disabled");
+            }
         }
     });
     
     xhr.open("POST", "./hung");
     xhr.setRequestHeader("Content-Type", "application/json");
     
-    lastSentMatrix = matrix;
-    xhr.send(JSON.stringify(matrix));
+    let request = {
+        max: isMaxProblem(),
+        problem: matrix,
+    };
+
+    lastSentRequest = request;
+    submitButton.setAttribute("disabled", true);
+    xhr.send(JSON.stringify(request));
 });
+
+function isMaxProblem() {
+    if (maxSelection.checked) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 function parseInput() {
     let value = textArea.value;
@@ -70,17 +98,13 @@ function parseInput() {
         return "Matrica nije unesena!";
     }
 
-    if (matrix[0].length != matrix.length) {
-        return "Unesena matrica nije kvadratna!";
-    }
-
     return matrix;
 }
 
 function displayTable(responseJson) {
-    for (let i = -1; i < lastSentMatrix.length; i++ ) {
+    for (let i = -1; i < responseJson.original_problem.length; i++ ) {
         let newRow = document.createElement("tr");
-        for (let j = -1; j < lastSentMatrix.length; j++) {
+        for (let j = -1; j < responseJson.original_problem.length; j++) {
             // create headings
             if (i == -1) {
                 let tableHeading = document.createElement("th");
@@ -97,10 +121,10 @@ function displayTable(responseJson) {
                 let bold = document.createElement("b");
                 console.log(i + " " + j + " " + responseJson.assigned_positions[i][j]);
                 if (responseJson.assigned_positions[i][j] == 1) {
-                    bold.innerText = lastSentMatrix[i][j];
+                    bold.innerText = responseJson.original_problem[i][j];
                     tableData.appendChild(bold);
                 } else {
-                    tableData.textContent = lastSentMatrix[i][j];
+                    tableData.textContent = responseJson.original_problem[i][j];
                 }
                 newRow.appendChild(tableData);
             }

@@ -17,4 +17,4 @@ serde_json = "1"
 # futures = "0.3.14"
 # tokio = { version = "0.2.6", features = ["full"] }
 
-madarska_metoda = { git = "https://github.com/HrvojeLesar/madarska_metoda", version = "0.1.2"}
+madarska_metoda = { git = "https://github.com/HrvojeLesar/madarska_metoda", version = "0.1.5"}

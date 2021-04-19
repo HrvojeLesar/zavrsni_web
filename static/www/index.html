@@ -15,11 +15,17 @@
     <div id="input-div">
         <div class="wrapper">
             <textarea id="input-area" cols="80" rows="20"></textarea>
+            <div class="min-max">
+                <input type="radio" id="min" name="min-max-problem" value="min" checked="checked">
+                <label for="min">Min</label>
+                <input type="radio" id="max" name="min-max-problem" value="max">
+                <label for="max">Max</label>
+            </div>
             <div>
                 <button id="submit">Riješi</button>
             </div>
             <div id="solution"></div>
-            <table id="solution-table"></table>
+            <table id="solution-table" style="font-family: Verdana, Geneva, Tahoma, sans-serif;"></table>
         </div>
     </div>
 
