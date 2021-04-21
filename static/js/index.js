@@ -36,6 +36,12 @@ submitButton.addEventListener("click", function() {
                 submitButton.removeAttribute("disabled");
                 solutionDiv.style.color = "black";
                 let responseJson = JSON.parse(this.responseText);
+                console.log(responseJson);
+                if (responseJson.result == -1 && responseJson.assigned_positions.length == 1 && responseJson.assigned_positions[0].length == 1) {
+                    solutionDiv.textContent = "Dogodila se greška kod rješavanja zadane matrice!";
+                    solutionDiv.style.color = "red";
+                    return;
+                }
                 if (lastSentRequest.max) {
                     solutionDiv.textContent = "Maksimalni profit: " + responseJson.result;
                 } else {

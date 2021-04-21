@@ -45,7 +45,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
         .service(hello)
         .service(solve_hungarian)
-        .data(web::JsonConfig::default().limit(32000))
+        .data(web::JsonConfig::default().limit(64000))
         .wrap(actix_web::middleware::Logger::default())
         .service(Files::new("/static/", "static/"))
     })
