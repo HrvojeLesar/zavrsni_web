@@ -21,7 +21,7 @@ struct HungResult {
 
 
 #[get("/")]
-async fn hello() -> impl Responder {
+async fn index() -> impl Responder {
     HttpResponse::Ok().content_type("text/html; charset=utf-8")
     .body(include_str!("../static/www/index.html"))
 }
@@ -43,7 +43,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-        .service(hello)
+        .service(index)
         .service(solve_hungarian)
         .data(web::JsonConfig::default().limit(64000))
         .wrap(actix_web::middleware::Logger::default())
