@@ -13,16 +13,32 @@
 <body>
 
     <div id="input-div">
-        <textarea class="mb-5" id="input-area" cols="80" rows="20"></textarea>
+
+        <button class="mb-5" data-state="false" id="switch-input-type">Brzi unos</button>
+
+        <div id="textbox-input" style="display: none;">
+            <textarea class="mb-5" id="input-area" cols="80" rows="20"></textarea>
+        </div>
+
+        <div id="cells-input">
+            <span>Dimenzije matrice: 
+                <input class="cell" type="text" id="cells-input-matrix-rows" value="5" autocomplete="off">
+                X
+                <input class="cell" type="text" id="cells-input-matrix-columns" value="5" autocomplete="off">
+            </span>
+            <div class="table">
+                <table id="cells-input-table" style="font-family: Verdana, Geneva, Tahoma, sans-serif;"></table>
+            </div>
+        </div>
+
         <div class="min-max mb-5">
             <input type="radio" id="min" name="min-max-problem" value="min" checked="checked">
             <label for="min">Min</label>
             <input type="radio" id="max" name="min-max-problem" value="max">
             <label for="max">Max</label>
         </div>
-        <div>
-            <button class="mb-5" id="submit">Riješi</button>
-        </div>
+        <button class="mb-5" id="submit">Riješi</button>
+        <button class="mb-5" id="gen">Gen</button>
         <div id="solution"></div>
         <div class="table">
             <table id="solution-table" style="font-family: Verdana, Geneva, Tahoma, sans-serif;"></table>

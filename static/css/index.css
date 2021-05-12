@@ -43,3 +43,13 @@ td {
     text-align: center;
     vertical-align: middle;
 }
+
+table th {
+    background-color: #eeeeee;
+    position: sticky;
+    left: 0;
+}
+
+input.cell {
+    width: 30px;
+}

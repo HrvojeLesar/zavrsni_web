@@ -30,7 +30,8 @@ async fn index() -> impl Responder {
 async fn solve_hungarian(input: web::Json<HungInput>) -> impl Responder {
     
     let matrix_in = Matrix::new(input.problem.clone());
-    let (res, assigned) = MadarskaMetoda::solve(&matrix_in, input.max);
+	let mut mm = MadarskaMetoda::new(&matrix_in);
+    let (res, assigned) = (mm.solve(input.max), mm.assignment_mask);
 
     HttpResponse::Ok().json(HungResult { result: res, original_problem: matrix_in.matrix, assigned_positions: assigned.matrix })
 }
