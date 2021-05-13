@@ -12,6 +12,9 @@ const switchInputTypeButton = document.getElementById("switch-input-type");
 const inputTextBoxView = document.getElementById("textbox-input");
 const inputCellView = document.getElementById("cells-input");
 
+const inputErrorMessage = document.getElementById("input-error-message");
+const solutionContainer = document.getElementById("solution-container");
+
 const gen = document.getElementById("gen");
 
 let placeholder = "Primjer unosa:\n1 2 3\n2 4 6\n3 6 9";
@@ -27,12 +30,12 @@ let lastSentRequest = {};
 
 submitButton.addEventListener("click", function() {
     let matrix = parseInput();
-    solutionDiv.textContent = "";
-    solutionDiv.style.color = "black";
+    inputErrorMessage.textContent = "";
+    inputErrorMessage.style.color = "black";
     table.innerHTML = "";
     if (typeof(matrix) === "string") {
-        solutionDiv.style.color = "red";
-        solutionDiv.textContent = matrix;
+        inputErrorMessage.style.color = "red";
+        inputErrorMessage.textContent = matrix;
         return;
     }
     
@@ -43,9 +46,9 @@ submitButton.addEventListener("click", function() {
         if(this.readyState === 4) {
             if (this.status === 200) {
                 submitButton.removeAttribute("disabled");
+                solutionContainer.style.display = "block";
                 solutionDiv.style.color = "black";
                 let responseJson = JSON.parse(this.responseText);
-                // console.log(responseJson.result);
                 if (responseJson.result == -1) {
                     solutionDiv.textContent = "Dogodila se greška kod rješavanja zadane matrice!";
                     solutionDiv.style.color = "red";
@@ -129,6 +132,7 @@ function parseInput() {
                     cell.children[0].style.background = "#fc5d5d";
                     inputError = true;
                 } else {
+                    cell.children[0].style.background = "white";
                     matrix[i].push(inputCellValue);
                 }
             }
@@ -220,6 +224,7 @@ function createEmptyCell(row, col) {
     inputCell.classList.add("cell");
     inputCell.type = "text";
     inputCell.id = `cell-${row}-${col}`;
+    inputCell.autocomplete = "off";
     emptyCell.appendChild(inputCell);
     return emptyCell;
 }
@@ -273,24 +278,36 @@ matrixColumnDimCell.addEventListener("keyup", updateColumns);
 matrixColumnDimCell.addEventListener("blur", updateColumns);
 
 
-switchInputTypeButton.addEventListener("click", function() {
-    switch (switchInputTypeButton.dataset.state) {
-        case "true": {
-            switchInputTypeButton.textContent = "Brzi unos";
+function inputType(type) {
+    switch (type) {
+        case "cells": {
             inputTextBoxView.style.display = "none";
             inputCellView.style.display = "block";
-            switchInputTypeButton.dataset.state = "false";
             break;
         }
-        case "false": {
-            switchInputTypeButton.textContent = "Unos po čelijama";
-            inputCellView.style.display = "none";
+        case "quick": {
             inputTextBoxView.style.display = "block";
-            switchInputTypeButton.dataset.state = "true";
+            inputCellView.style.display = "none";
             break;
         }
     }
-});
+}
 
+function showModal(modal) {
+    console.log(modal);
+    modal = document.getElementById(modal);
+    console.log(modal);
+    modal.style.display = "block";
+}
+
+function closeModal(modal) {
+    modal.parentElement.parentElement.style.display = "none";
+}
+
+window.addEventListener("click", function(event) {
+    if (event.target.classList == "modal") {
+        event.target.style.display = "none";
+    }
+});
 
 createInitialCellsTable();
