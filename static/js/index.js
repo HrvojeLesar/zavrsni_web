@@ -76,7 +76,11 @@ submitButton.addEventListener("click", function() {
         }
     });
     
-    xhr.open("POST", "./hung");
+    if (document.getElementById("hung").checked) {
+        xhr.open("POST", "./hung");
+    } else {
+        xhr.open("POST", "./hung-munkres");
+    }
     xhr.setRequestHeader("Content-Type", "application/json");
     
     let request = {
