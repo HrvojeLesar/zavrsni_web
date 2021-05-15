@@ -5,6 +5,7 @@ use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use actix_files::Files;
 use serde::{Serialize, Deserialize};
 use tokio::process::Command;
+use serde_json::json;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct HungInput {
@@ -12,16 +13,10 @@ struct HungInput {
     problem: Vec<Vec<i32>>,
 }
 
-#[derive(Debug, Serialize)]
-struct HungResult<'a> {
-    result: i32,
-    original_problem: &'a Vec<Vec<i32>>,
-    assigned_positions: Vec<Vec<i32>>,
-}
-
 #[derive(Debug, Serialize, Deserialize)]
 struct ReturnResult {
     result: i32,
+    original_problem: Vec<Vec<i32>>,
     assignment_mask: Vec<Vec<i32>>,
 }
 
@@ -38,20 +33,19 @@ async fn index() -> impl Responder {
 
 #[post("/hung")]
 async fn solve_hungarian(input: web::Json<HungInput>) -> impl Responder {
-
     if let Ok(res) = tokio::time::timeout(std::time::Duration::from_secs(10), start_process(ProcessType::HungarianMethod, &input)).await {
-        return HttpResponse::Ok().json(HungResult { result: res.result, original_problem: &input.problem, assigned_positions: res.assignment_mask });
+        return HttpResponse::Ok().json(res);
     } else {
-        return HttpResponse::Ok().finish();
+        return HttpResponse::Ok().json( json!({"error": "Timed out"}) );
     }
 }
 
 #[post("/hung-munkres")]
 async fn solve_hungarian_munkres(input: web::Json<HungInput>) -> impl Responder {
     if let Ok(res) = tokio::time::timeout(std::time::Duration::from_secs(10), start_process(ProcessType::HungarianMethodMunkres, &input)).await {
-        return HttpResponse::Ok().json(HungResult { result: res.result, original_problem: &input.problem, assigned_positions: res.assignment_mask });
+        return HttpResponse::Ok().json(res);
     } else {
-        return HttpResponse::Ok().finish();
+        return HttpResponse::Ok().json( json!({"error": "Timed out"}) );
     }
 }
 

@@ -99,17 +99,35 @@
             </div>
             <div class="solve">
                 <button id="submit">Riješi</button>
-                <button id="gen" style="display: none;">Gen</button>
+                <!-- <button id="gen" style="display: none;">Gen</button> -->
                 <div id="input-error-message"></div>
             </div>
         </div>
 
         <div id="solution-container" class="solution-container" style="display: none;">
-            <h3>Rješenje</h3>
-            <div id="solution"></div>
+            <h3>Rješenje
+                <div class="tooltip">
+                    <img class="info" src="./static/assets/info-circle-solid.svg" alt="Prikaz rješenja info" onclick="showModal('solution-modal')">
+                    <span class="tooltiptext">Kliknite za više informacija o prikazu rješenja</span>
+                </div>
+            </h3>
+            
+            <div class="tab">
+                <button id="tab-table-display" class="active" onclick="showSelectedView(this)">Tablični prikaz</button>
+                <button id="tab-text-display" onclick="showSelectedView(this)">Tekstualni prikaz</button>
+            </div>
 
-            <div class="table">
+            <div class="solution-formating">
+                <div id="solution-message"></div>
+                <b id="solution-value"></b>
+            </div>
+            
+            <div id="solution-table-parent" class="table">
                 <table id="solution-table" style="font-family: Verdana, Geneva, Tahoma, sans-serif;"></table>
+            </div>
+
+            <div id="solution-text-parent" class="table" style="display: none;">
+                <textarea readonly id="solution-textarea" cols="80" rows="20"></textarea>
             </div>
         </div>
 
@@ -119,6 +137,7 @@
                 <div class="modal-header">
                     Informacije o načinu unosa matrice
                 </div>
+                TODO
             </div>
         </div>
 
@@ -128,6 +147,7 @@
                 <div class="modal-header">
                     Informacije o odabiru algoritma
                 </div>
+                TODO
             </div>
         </div>
 
@@ -137,6 +157,17 @@
                 <div class="modal-header">
                     Informacije o minimalizaciji, maksimalizaciji
                 </div>
+                TODO
+            </div>
+        </div>
+
+        <div class="modal" id="solution-modal">
+            <div class="modal-body">
+                <span class="close" onclick="closeModal(this)">&times;</span>
+                <div class="modal-header">
+                    Informacije o prikazu rješenja
+                </div>
+                TODO
             </div>
         </div>
 

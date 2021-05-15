@@ -1,6 +1,6 @@
 const textArea = document.getElementById("input-area");
 const submitButton = document.getElementById("submit");
-const solutionDiv = document.getElementById("solution");
+
 const table = document.getElementById("solution-table");
 const minSelection = document.getElementById("min");
 const maxSelection = document.getElementById("max");
@@ -15,7 +15,14 @@ const inputCellView = document.getElementById("cells-input");
 const inputErrorMessage = document.getElementById("input-error-message");
 const solutionContainer = document.getElementById("solution-container");
 
-const gen = document.getElementById("gen");
+const solutionMessage = document.getElementById("solution-message");
+const solutionValue = document.getElementById("solution-value");
+
+const solutionTableParent = document.getElementById("solution-table-parent");
+const solutionTextParent =  document.getElementById("solution-text-parent");
+const solutionTextArea = document.getElementById("solution-textarea");
+
+// const gen = document.getElementById("gen");
 
 let placeholder = "Primjer unosa:\n1 2 3\n2 4 6\n3 6 9";
 textArea.setAttribute('placeholder', placeholder);
@@ -32,7 +39,12 @@ submitButton.addEventListener("click", function() {
     let matrix = parseInput();
     inputErrorMessage.textContent = "";
     inputErrorMessage.style.color = "black";
+
+    solutionMessage.textContent = "";
+    solutionValue.textContent = "";
+    solutionTextArea.value = "";
     table.innerHTML = "";
+
     if (typeof(matrix) === "string") {
         inputErrorMessage.style.color = "red";
         inputErrorMessage.textContent = matrix;
@@ -47,30 +59,35 @@ submitButton.addEventListener("click", function() {
             if (this.status === 200) {
                 submitButton.removeAttribute("disabled");
                 solutionContainer.style.display = "block";
-                solutionDiv.style.color = "black";
+                solutionMessage.style.color = "black";
                 let responseJson = JSON.parse(this.responseText);
+
+                if (responseJson.error != undefined) {
+                    solutionMessage.textContent = "Prošlo je dozvoljeno maksimalno vrijeme rješavanja! (10s)";
+                    solutionMessage.style.color = "red";
+                    return;
+                }
+
                 if (responseJson.result == -1) {
-                    solutionDiv.textContent = "Dogodila se greška kod rješavanja zadane matrice!";
-                    solutionDiv.style.color = "red";
+                    solutionMessage.textContent = "Dogodila se greška kod rješavanja zadane matrice!";
+                    solutionMessage.style.color = "red";
                     return;
                 }
-				if (responseJson.result == -2) {
-                    solutionDiv.textContent = "-2!";
-                    solutionDiv.style.color = "red";
-                    return;
-                }
+
                 if (lastSentRequest.max) {
-                    solutionDiv.textContent = "Maksimalni profit: " + responseJson.result;
+                    solutionMessage.textContent = "Maksimalni profit: ";
                 } else {
-                    solutionDiv.textContent = "Minimalni trošak: " + responseJson.result;
+                    solutionMessage.textContent = "Minimalni trošak: ";
                 }
+                solutionValue.textContent = responseJson.result;
                 displayTable(responseJson);
+                fillSolutionTextArea(responseJson);
                 //  gen.click();
                 //  submitButton.click();
             }
             if (this.status === 413) {
-                solutionDiv.style.color = "red";
-                solutionDiv.textContent = "Dogodila se greška kod slanja matrice!\nPokušajte poslati manju matricu!";
+                solutionMessage.style.color = "red";
+                solutionMessage.textContent = "Dogodila se greška kod slanja matrice!\nPokušajte poslati manju matricu!";
                 submitButton.removeAttribute("disabled");
             }
         }
@@ -172,7 +189,7 @@ function displayTable(responseJson) {
             } else {
                 let tableData = document.createElement("td");
                 let bold = document.createElement("b");
-                if (responseJson.assigned_positions[i][j] == 1) {
+                if (responseJson.assignment_mask[i][j] == 1) {
                     bold.innerText = responseJson.original_problem[i][j];
                     tableData.appendChild(bold);
                 } else {
@@ -185,27 +202,38 @@ function displayTable(responseJson) {
     }
 }
 
+function fillSolutionTextArea(responseJson) {
+    solutionTextArea.value = "";
+    for (let i = 0; i < responseJson.original_problem.length; i++) {
+        for (let j = 0; j < responseJson.original_problem.length; j++) {
+            if (responseJson.assignment_mask[i][j] == 1) {
+                solutionTextArea.value += `Radnik [${i + 1}] raspoređen na posao [${j + 1}]. Vrijednost [${responseJson.original_problem[i][j]}].\n`;
+            }
+        }
+    }
+}
+
 
 function checkAssigned(row, col, responseJson) {
-    for (let i = 0; i < responseJson.assigned_positions.length; i++) {
-        if (responseJson.assigned_positions[i][0] == row && responseJson.assigned_positions[i][1] == col) {
+    for (let i = 0; i < responseJson.assignment_mask.length; i++) {
+        if (responseJson.assignment_mask[i][0] == row && responseJson.assignment_mask[i][1] == col) {
             return true;
         }
     }
     return false;
 }
 
-gen.addEventListener("click", function() {
-	let max = 100;
-    let out = "";
-    for (let i = 0; i < max; i++) {
-        for (let j = 0; j < max; j++) {
-            out += Math.floor(Math.random() * 50 + 1) + " ";
-        }
-        out += "\n";
-    }
-    textArea.value = out;
-});
+// gen.addEventListener("click", function() {
+// 	let max = 100;
+//     let out = "";
+//     for (let i = 0; i < max; i++) {
+//         for (let j = 0; j < max; j++) {
+//             out += Math.floor(Math.random() * 50 + 1) + " ";
+//         }
+//         out += "\n";
+//     }
+//     textArea.value = out;
+// });
 
 function createInitialCellsTable() {
     let rows = Number(matrixRowDimCell.value);
@@ -313,5 +341,30 @@ window.addEventListener("click", function(event) {
         event.target.style.display = "none";
     }
 });
+
+function showSelectedView(executor) {
+    if (executor.classList.contains("active")) {
+        return;
+    }
+
+    for (let child of executor.parentElement.children) {
+        child.classList.remove("active");
+    }
+    executor.classList.add("active");
+
+    switch (executor.id) {
+        case "tab-table-display": {
+            solutionTableParent.style.display = "block";
+            solutionTextParent.style.display = "none";
+            break;
+        }
+        
+        case "tab-text-display": {
+            solutionTextParent.style.display = "block";
+            solutionTableParent.style.display = "none";
+            break;
+        }
+    }
+}
 
 createInitialCellsTable();

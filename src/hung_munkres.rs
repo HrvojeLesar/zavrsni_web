@@ -6,6 +6,7 @@ use serde::{Serialize, Deserialize};
 #[derive(Debug, Serialize)]
 struct ReturnResult {
     result: i32,
+    original_problem: Vec<Vec<i32>>,
     assignment_mask: Vec<Vec<i32>>,
 }
 
@@ -25,6 +26,7 @@ fn main() {
 
     let ret = ReturnResult {
         result: res,
+        original_problem: matrix.matrix,
         assignment_mask: mm.assignment_mask.matrix,
     };
 
