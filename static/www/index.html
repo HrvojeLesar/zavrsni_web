@@ -30,7 +30,7 @@
                 <ul>
                     <li>
                         <input type="radio" id="cit" name="input-type-selection" value="cit" checked="checked" onclick="inputType('cells')">
-                        <label for="cit">Unos po čelijama</label>
+                        <label for="cit">Unos po ćelijama</label>
                     </li>
                     <li>
                         <input type="radio" id="qit" name="input-type-selection" value="qit" onclick="inputType('quick')">
@@ -49,7 +49,7 @@
                 <ul>
                     <li>
                         <input type="radio" id="hung" name="algorithm-type-selection" value="hung" checked="checked">
-                        <label for="hung">Madarksa metoda</label>
+                        <label for="hung">Mađarksa metoda</label>
                     </li>
                     <li>
                         <input type="radio" id="hung-munkres" name="algorithm-type-selection" value="hung-munkres">
@@ -137,7 +137,34 @@
                 <div class="modal-header">
                     Informacije o načinu unosa matrice
                 </div>
-                TODO
+                Aplikacija nudi na odabir dva različita unosa matrice. Aplikacija prima samo cijele brojeve.
+                <div class="modal-content">
+                    <h3>Unos po ćelijama</h3>
+                    <p>
+                        Unos po ćelijama prikazuje matricu ćelija prema unesenim dimenzijama (zadano 5x5).
+                        Moguće je po volji mijenjati dimenzije matrice. (<b>NAPOMENA:</b> velike dimenzije matrice su spore za prikazati zbog potrebnog crtanja velikog broja ćelija)
+                        Svaka ne popunjena ćelija se kod slanja tretira kao da je unesena nula.
+                    </p>
+                    <p>
+                        Primjer unosa:
+                    </p>
+                    <div class="modal-gif-container">
+                        <img class="modal-gif" src="./static/assets/cell-input-anim.gif" alt="Primjer unosa po ćelijama">
+                    </div>
+                    <div class="modal-separator"></div>
+                    <h3>Brzi unos</h3>
+                    <p>
+                        Brzi unos je namijenjen za unos većih matrica, za validan unos potrebno je unijeti redove matrice.
+                        Svaka vrijednost u redu mora biti odvojena razmakom, a novi red u tekstu predstavlja novi red u matrici.
+                        Moguće je unositi već formatirane matrice copy-pasteom.
+                    </p>
+                    <p>
+                        Primjer unosa:
+                    </p>
+                    <div class="modal-gif-container">
+                        <img class="modal-gif" src="./static/assets/quick-input-anim.gif" alt="Primjer brzog unosa">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -147,7 +174,20 @@
                 <div class="modal-header">
                     Informacije o odabiru algoritma
                 </div>
-                TODO
+                Aplikacija radi s dva algoritma tj. metoda za rješavanje problema raspoređivanja.
+                <div class="modal-content">
+                    <h3>Mađarska metoda</h3>
+                    <p>
+                        Odabirom ove opcije aplikacija će riješiti unesenu matricu koracima definiranim mađarskom metodom.
+                        Točni koraci su navedeni u knjizi "Z. Lukač i L. Neralić, Operacijska istraživanja. Element, 2012."
+                    </p>
+                    <div class="modal-separator"></div>
+                    <h3>Munkres-ova modifikacija mađarske metode</h3>
+                    <p>
+                        Odabirom ove opcije aplikacija će riješiti unesenu matricu koracima definiranim Munkres-ovom modifikacijom.
+                        Koraci riješavanja i detaljan opis metode je dostupan u članku "J. Munkres, „Algorithms for the Assignment and Transportation Problems,”Journal of the Society for Industrial and Applied Mathematics, sv. 5, br. 1, str. 32–38, 1957."
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -157,7 +197,14 @@
                 <div class="modal-header">
                     Informacije o minimalizaciji, maksimalizaciji
                 </div>
-                TODO
+                <p>
+                    Odabirom minimalizacije funkcija cilja će biti minimizirana što znaći da će rješenje imati minimalnu vrijednost.
+                </p>
+                <p>
+                    Odabirom maksimalizacije funkcija cilja se maksimizira i rješenje će imati maksimalnu vrijednost.
+                </p>
+                <div class="modal-content">
+                </div>
             </div>
         </div>
 
@@ -167,7 +214,18 @@
                 <div class="modal-header">
                     Informacije o prikazu rješenja
                 </div>
-                TODO
+                Aplikacija nudi na odabir dva načina prikaza rješenja, tablični i tekstualni prikaz.
+                <div class="modal-content">
+                    <h3>Tablični prikaz</h3>
+                    <p>
+                        Prikazuje matricu i odabrane vrijednosti od kojih se sastoji rješenje. Svaki red u tablici označava radnika, a stupac posao na koji je taj radnik raspoređen. U slučaju da je unesena matrica nije bila kvadratna u prikazanoj matrici će biti dodani redovi ili stupci popunjeni fiktivnim nulama.
+                    </p>
+                    <div class="modal-separator"></div>
+                    <h3>Tekstualni prikaz</h3>
+                    <p>
+                        Daje rješenje u obilku teksta. Za svaki red tj. radnika je ispisano na koji posao je raspoređen i vrijednost zadana originalnom matricom. Zbroj svih vrijednosti je jednak konačnome rezultatu.
+                    </p>
+                </div>
             </div>
         </div>
 

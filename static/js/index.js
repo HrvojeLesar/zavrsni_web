@@ -24,8 +24,11 @@ const solutionTextArea = document.getElementById("solution-textarea");
 
 // const gen = document.getElementById("gen");
 
-let placeholder = "Primjer unosa:\n1 2 3\n2 4 6\n3 6 9";
-textArea.setAttribute('placeholder', placeholder);
+document.addEventListener("DOMContentLoaded", function() {
+	let placeholder = "Primjer unosa:\n1 2 3\n2 4 6\n3 6 9";
+	textArea.setAttribute('placeholder', placeholder);
+	createInitialCellsTable();
+});
 
 const test = [
     [1, 2, 3],
@@ -86,8 +89,13 @@ submitButton.addEventListener("click", function() {
                 //  submitButton.click();
             }
             if (this.status === 413) {
-                solutionMessage.style.color = "red";
-                solutionMessage.textContent = "Dogodila se greška kod slanja matrice!\nPokušajte poslati manju matricu!";
+                inputErrorMessage.style.color = "red";
+                inputErrorMessage.textContent = "Dogodila se greška kod slanja matrice!\nPokušajte poslati manju matricu!";
+                submitButton.removeAttribute("disabled");
+            }
+            if (this.status === 400) {
+                inputErrorMessage.style.color = "red";
+                inputErrorMessage.textContent = "Aplikacija podržava samo unos cijelih brojeva";
                 submitButton.removeAttribute("disabled");
             }
         }
@@ -153,7 +161,7 @@ function parseInput() {
                     cell.children[0].style.background = "#fc5d5d";
                     inputError = true;
                 } else {
-                    cell.children[0].style.background = "white";
+                    cell.children[0].style.background = "";
                     matrix[i].push(inputCellValue);
                 }
             }
@@ -366,5 +374,3 @@ function showSelectedView(executor) {
         }
     }
 }
-
-createInitialCellsTable();
